@@ -1,30 +1,48 @@
 "use strict";
 
-// les chemins autorisés :
-// UP, RIGHT, DOWN, LEFT
-// 1 = passage, 0 = bloquage
-let paths = [
-[[0, 1, 1, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 1, 0]],
-[[0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 1, 0]],
-[[0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 1, 1], [0, 1, 1, 0], [0, 0, 1, 0]],
-[[0, 0, 1, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 1, 0, 0], [0, 0, 1, 0]],
-[[0, 1, 0, 0], [1, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]]
-];
+
+/** 
+* Create the link to all the "ynxn.png" images
+* @param {String} path - the path to the file
+* @param {number} numX - the number of columns (X axis)
+* @param {number} numY - the number of rows (Y axis)
+*/
+function composeHtmlGrid(path, numX, numY){
+  let html = "";
+  for (let j = 0; j< numX; j++){
+    for (let i = 0; i< numY; i++){
+
+      html += '<div class="panel x' + i + ' y' + j + '" style="background-image: url(' + path + '/y' + j + 'x' + i + '.png); background-size:cover;"></div>';
+    }
+  }
+  return html;
+}
 
 
-// let temp = paths[posTop][posLeft][0]; 
 
 
+/**
+* Inject content into a DOM ID target
+* @param {String} html - the content to add
+* @param {String} target - the id of the target
+*/
+function injectPanels(html, target){
+  document.getElementById(target).innerHTML = html;
+}
+
+
+
+
+/**
+* Adapt all style to the size of the panels.
+*/
 function initCss(size) {
   let comic = document.getElementById("comic");
   comic.style.width = size * 3 + "px";
   comic.style.height = size * 3 + "px";
 
-  let panels = document.getElementsByClassName("panel");
-  for (let i = 0; i < panels.length; i++) {
-    panels[i].style.width = size + "px";
-    panels[i].style.height = size + "px";
-  }
+  // add a style in the DOM
+  document.getElementById('style').innerHTML = '.panel {width:'+size+'px; height:'+size+'px;}';
 
   let grille = document.getElementById("grille");
   grille.style.marginTop = size + "px";
@@ -45,6 +63,12 @@ function initCss(size) {
   }
 }
 
+
+
+
+/** 
+* Active a certain panel, show the next available paths 
+*/
 function activePanels(posTop, posLeft) {
   // position actuelle = posLeft, posTop
   let coordX = "x" + posLeft;
@@ -55,9 +79,9 @@ function activePanels(posTop, posLeft) {
   elems[0].classList.add("available");
 
   // les cases connexes sont traitées de la même façon si elles sont accessibles
-  for (let i = 0; i < paths[posTop][posLeft].length; i++) {
+  for (let i = 0; i < possiblePaths[posTop][posLeft].length; i++) {
     let giveAccessTo;
-    if (paths[posTop][posLeft][i] === 1) {
+    if (possiblePaths[posTop][posLeft][i] === 1) {
       switch (i) {
         case 0:
         giveAccessTo = document.getElementsByClassName("x" + posLeft + " " + "y" + (posTop - 1));
@@ -80,10 +104,15 @@ function activePanels(posTop, posLeft) {
   }
 }
 
+
+
+
+/**
+* Display arrows when needed
+*/
 function activeArrows(posTop, posLeft) {
-  // arrows est un array [0,0,1,1] qui indique quelles flcèhes activer.
-  // ce sont... les mêmes que dans le tableau ci-dessus !!!!!
-  let arrows = paths[posTop][posLeft];
+  // get the possible path from the config
+  let arrows = possiblePaths[posTop][posLeft];
   let arrow = document.getElementsByClassName("arrow");
   for (let i = 0; i < arrows.length; i++) {
     if (arrows[i] === 1) {
@@ -105,6 +134,12 @@ function activeArrows(posTop, posLeft) {
   }
 }
 
+
+
+
+/** 
+* Hide all the panels to show only thoses who are necessary
+*/
 function hideAllPanels() {
   let panels = document.getElementsByClassName("panel");
   for (let i = 0; i < panels.length; i++) {
@@ -112,6 +147,12 @@ function hideAllPanels() {
   }
 }
 
+
+
+
+/** 
+* Hide all the arrows to show only thoses who are necessary
+*/
 function hideArrows() {
   let arrows = document.getElementsByClassName("arrow");
   for (let i = 0; i < arrows.length; i++) {
@@ -119,6 +160,14 @@ function hideArrows() {
   }
 }
 
+
+
+
+
+/** 
+* Move inside the grid in a given direction
+* @param {String} dir - the direction to follow ("down", "up", "left", "right")
+*/
 function move(dir) {
   hideAllPanels();
   hideArrows();
@@ -128,28 +177,28 @@ function move(dir) {
   switch (dir) {
 
     case "down":
-    if (posTop < 4 && posTop >= 0 && paths[posTop][posLeft][2] == 1) {
+    if (posTop < 4 && posTop >= 0 && possiblePaths[posTop][posLeft][2] == 1) {
       posTop += 1;
       grille.style.top = -1 * posTop * panelSize + "px";
     }
     break;
 
     case "up":
-    if (posTop > 0 && posTop <= 4 && paths[posTop][posLeft][0] == 1) {
+    if (posTop > 0 && posTop <= 4 && possiblePaths[posTop][posLeft][0] == 1) {
       posTop -= 1;
       grille.style.top = -1 * posTop * panelSize + "px";
     }
     break;
 
     case "right":
-    if (posLeft < 4 && posLeft >= 0 && paths[posTop][posLeft][1] == 1) {
+    if (posLeft < 4 && posLeft >= 0 && possiblePaths[posTop][posLeft][1] == 1) {
       posLeft += 1;
       grille.style.left = -1 * posLeft * panelSize + "px";
     }
     break;
 
     case "left":
-    if (posLeft > 0 && posLeft <= 4 && paths[posTop][posLeft][3] == 1) {
+    if (posLeft > 0 && posLeft <= 4 && possiblePaths[posTop][posLeft][3] == 1) {
       posLeft -= 1;
       grille.style.left = -1 * posLeft * panelSize + "px";
     }
@@ -161,7 +210,13 @@ function move(dir) {
   activeArrows(posTop, posLeft);
 }
 
-function keyMove(e) {
+
+
+
+/**
+* Keypress send a String to the move() function
+*/
+function moveTile(e) {
   switch (e.keyCode) {
     case 37:
     move("left");
@@ -178,27 +233,39 @@ function keyMove(e) {
   }
 }
 
-function reset() {
-  posTop = initPosTop;
-  posLeft = initPosLeft;
-  // il faut encore repositionner le comic.
-  let grille = document.getElementById("grille");
-  grille.style.top = -1 * posTop * panelSize + "px";
-  grille.style.left = -1 * posLeft * panelSize + "px";
 
-  initCss(panelSize);
+
+/**
+* Initialize or reset the webcomic
+*/
+function init(reset){
+  posTop = 0;
+  posLeft = 0;
+  if (reset){
+    let grille = document.getElementById("grille");
+    grille.style.top = -1 * posTop * panelSize + "px";
+    grille.style.left = -1 * posLeft * panelSize + "px";
+  }else{
+    initCss(panelSize);
+    injectPanels(composeHtmlGrid(pathToPanels,5,5), 'grille');
+  } 
   activePanels(posLeft, posTop);
   activeArrows(posLeft, posTop);
 }
 
+
 // ============================
 // STARTING POINT
 // ============================
-console.clear();
-let posTop = initPosTop;
-let posLeft = initPosLeft;
-initCss(panelSize);
-activePanels(posLeft, posTop);
-activeArrows(posLeft, posTop);
+var posTop = initPosTop;
+var posLeft = initPosLeft;
 
-window.addEventListener('keydown', keyMove);
+/** Display title */
+document.getElementsByTagName('title')[0].innerHTML = title;
+document.getElementsByTagName('h1')[0].innerHTML = title;
+
+/** init the webcomics */
+init(false);
+
+/** listen to keydown */
+window.addEventListener('keydown', moveTile);

@@ -41,9 +41,19 @@ nav .button.down {bottom:0; left:50%; transform: translateX(-50%);}
 nav .button.left {left:0; top:50%; transform: translateY(-50%);}
 nav .button.right {right:0; top:50%; transform: translateY(-50%);}
 
-button {
-  margin-top:10px;
+.reset_button {
+  display: inline-block;
+  margin:10px auto;
   padding:5px 10px;
+  border:1px solid #eee;
+  border-radius:4px;
+  cursor:pointer;
+}
+.reset_button:hover {
+  background: #666;
+}
+.reset_button:active{
+  background: #fff;
 }
 
 .grille {
@@ -66,6 +76,8 @@ button {
   text-align: center;
   opacity:0;
   transition: opacity 0.3s ease-in-out 0.3s;
+  width:100px;
+  height:100px;
 }
 
 .available {

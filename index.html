@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Une mort</title>
+	<title>Un webcomic</title>
 
 	<link rel="stylesheet" href="style.css">
 
@@ -11,11 +11,14 @@
 <body>
 	
 
-	<h1>Une mort</h1>
+	<h1>Un webcomic</h1>
 
-	<p>Cliquez sur les cases où vous voulez vous rendre, ou utililsez les flèches du clavier.</p>
+	<!-- <p>Cliquez sur les cases où vous voulez vous rendre, ou utililsez les flèches du clavier.</p> -->
+	<p>Clic on the panel you want to follow, or use keyboard arrows.</p>
 
 	<div id="comic">
+
+		<style id="style"></style>
 
 		<div id="pngmask"></div>
 
@@ -33,40 +36,12 @@
 			<div class="button right" onclick="move('right')"></div>			
 		</nav>
 
-		<div class="grille" id="grille" name="grille">
-
-			<div class="panel x0 y0" style="background-image: url('webco-unemort/01.png'); background-size:cover;"></div>
-			<div class="panel x1 y0" style="background-image: url('webco-unemort/02.png'); background-size:cover;"></div>
-			<div class="panel x2 y0" style="background-image: url('webco-unemort/03.png'); background-size:cover;"></div>
-			<div class="panel x3 y0" style="background-image: url('webco-unemort/04.png'); background-size:cover;"></div>
-			<div class="panel x4 y0" style="background-image: url('webco-unemort/05.png'); background-size:cover;"></div>
-			<div class="panel x0 y1" style="background-image: url('webco-unemort/06.png'); background-size:cover;"></div>
-			<div class="panel x1 y1" style="background-image: url('webco-unemort/07.png'); background-size:cover;"></div>
-			<div class="panel x2 y1" style="background-image: url('webco-unemort/08.png'); background-size:cover;"></div>
-			<div class="panel x3 y1" style="background-image: url('webco-unemort/09.png'); background-size:cover;"></div>
-			<div class="panel x4 y1" style="background-image: url('webco-unemort/10.png'); background-size:cover;"></div>
-			<div class="panel x0 y2" style="background-image: url('webco-unemort/11.png'); background-size:cover;"></div>
-			<div class="panel x1 y2" style="background-image: url('webco-unemort/12.png'); background-size:cover;"></div>
-			<div class="panel x2 y2" style="background-image: url('webco-unemort/13.png'); background-size:cover;"></div>
-			<div class="panel x3 y2" style="background-image: url('webco-unemort/14.png'); background-size:cover;"></div>
-			<div class="panel x4 y2" style="background-image: url('webco-unemort/15.png'); background-size:cover;"></div>
-			<div class="panel x0 y3" style="background-image: url('webco-unemort/16.png'); background-size:cover;"></div>
-			<div class="panel x1 y3" style="background-image: url('webco-unemort/17.png'); background-size:cover;"></div>
-			<div class="panel x2 y3" style="background-image: url('webco-unemort/18.png'); background-size:cover;"></div>
-			<div class="panel x3 y3" style="background-image: url('webco-unemort/19.png'); background-size:cover;"></div>
-			<div class="panel x4 y3" style="background-image: url('webco-unemort/20.png'); background-size:cover;"></div>
-			<div class="panel x0 y4" style="background-image: url('webco-unemort/21.png'); background-size:cover;"></div>
-			<div class="panel x1 y4" style="background-image: url('webco-unemort/22.png'); background-size:cover;"></div>
-			<div class="panel x2 y4" style="background-image: url('webco-unemort/23.png'); background-size:cover;"></div>
-			<div class="panel x3 y4" style="background-image: url('webco-unemort/24.png'); background-size:cover;"></div>
-			<div class="panel x4 y4" style="background-image: url('webco-unemort/25.png'); background-size:cover;"></div>
-
-		</div>
+		<div class="grille" id="grille"></div>
 
 		<div class="superviseur"></div>
 	</div>
 
-	<button onclick="reset()">Reset</button>
+	<div class="reset_button" onclick="init(true)">Reset</div>
 
 	<div id="debug"></div>
 
